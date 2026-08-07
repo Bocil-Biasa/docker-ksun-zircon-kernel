@@ -1,0 +1,32 @@
+name: Download kernel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Downloading ZIP...
+        run: |
+          wget -O zircon-t-oss.zip https://github.com/MiCode/Xiaomi_Kernel_OpenSource/archive/refs/heads/zircon-t-oss.zip
+
+      - name: Unzipping...
+        run: |
+          unzip zircon-t-oss.zip
+          rm zircon-t-oss.zip
+          # Move the kernels file & folder to current dir
+          mv Xiaomi_Kernel_OpenSource-zircon-t-oss/* .
+          mv Xiaomi_Kernel_OpenSource-zircon-t-oss/.* . 2>/dev/null || true
+          rmdir Xiaomi_Kernel_OpenSource-zircon-t-oss
+
+      - name: Checking...
+        run: |
+          echo "=== current directory ==="
+          ls -la
+          echo ""
+          echo "=== Makefile ==="
+          head -5 Makefile || echo "Makefile not found"
+          echo ""
+          echo "=== folder arch ==="
+          ls arch/ || echo "arch Folder doesn't exist"
